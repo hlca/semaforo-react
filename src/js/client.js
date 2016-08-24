@@ -2,107 +2,46 @@ import expect from 'expect';
 import { createStore } from 'redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Immutable from 'immutable';
 
-// Javascript the good parts
+import "../css/styles.scss";
 
-const Counter = ({ value, incrementAction, decrementAction, removeAction }) => (
-  <div>
-    <h1>{ value }</h1>
-    <button onClick={ incrementAction }>+</button>
-    <button onClick={ decrementAction }>-</button>
-    <button onClick={ removeAction }>x</button>
-  </div>
+const Bulb = ({ color, active }) => (
+  <div class={ color + " light" }></div>
 );
 
-const CounterList = ({ list }) => (
+const TrafficLight = ({on}) => (
   <div>
-    {
-      list.map(
-        (value, i) => (
-          <Counter
-            key={ i }
-            value={ value }
-            index={ i }
-            incrementAction={
-              () => store.dispatch({
-                type: 'INCREMENT',
-                payload: { index: i }
-              })
-            }
-            decrementAction={
-              () => store.dispatch({
-                type: 'DECREMENT',
-                payload: { index: i }
-              })
-            }
-            removeAction={
-              () => store.dispatch({
-                type: 'REMOVE_COUNTER',
-                payload: {
-                  index: i
-                }
-              })
-            }
-          />
-        )
-      )
-    }
-    <button onClick={ () => store.dispatch({ type: 'ADD_COUNTER' }) }>Add counter</button>
+  <div class="traffic-light">
+    <Bulb color={(on === 0 ? "active red" : "red")}></Bulb>  
+    <Bulb color={(on === 1 ? "active yellow" : "yellow")}></Bulb>  
+    <Bulb color={(on === 2 ? "active green" : "green")}></Bulb>  
+  </div>
+  <button onClick={ () => store.dispatch({type : "CHANGE_LIGHT"}) }>Change light</button>
   </div>
 );
-
-const validateIndex = (index, list) => 0 <= index && index < list.size;
-
-// Reducer
-const counterList = (state = Immutable.List.of(), action) => {
-
-  if(typeof action.payload !== 'undefined'){
-    var { index } = action.payload;
-  }
-
-  switch(action.type){
-    case 'ADD_COUNTER':
-      return state.push(0);
-
-    case 'REMOVE_COUNTER':
-
-      if(validateIndex(index, state)){
-        return state.delete(index);
-      }
-
-      return state;
-
-    case 'INCREMENT':
-
-      if(validateIndex(index, state)){
-        return state.update(index, (v) => v + 1);
-      }
-
-      return state;
-
-    case 'DECREMENT':
-
-      if(validateIndex(index, state)){
-        return state.update(index,  (v) => v - 1);
-      }
-
-      return state;
-
-    default:
-      return state;
-  }
-}
-
-// createStore: reducer --> store
-const store = createStore(counterList);
 
 const render = () => {
   ReactDOM.render(
-    <CounterList list={ store.getState() } />,
+    <TrafficLight on = { store.getState() }/>,
     document.getElementById('root')
   )
 }
+
+//My Reducer
+const trafficLight = (state = -1, action) => {
+    switch(state){
+      case 0:
+        return 1;
+      case 1:
+        return 2;
+      case 2:
+        return 0;
+      default:
+        return 0;
+    }
+}
+//createStore: reducer -> store
+const store = createStore(trafficLight);
 
 store.subscribe(render);
 render();

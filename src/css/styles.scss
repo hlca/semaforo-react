@@ -1,0 +1,38 @@
+$color-red: red;
+$color-yellow: yellow;
+$color-green: lightgreen;
+$color-black: black;
+$light-diameter: 150px;
+$traffic-light-width: 175px;
+$default-space: 10px;
+
+.red{
+	background-color: $color-red;
+}
+
+.yellow{
+	background-color: $color-yellow;
+}
+
+.green{
+	background-color: $color-green;
+}
+
+.light.active{
+	opacity: 1;
+}
+
+.light{
+	height:$light-diameter;
+	border-radius:100%;
+	width:$light-diameter;
+	opacity:0.5;
+	transition: 0.75s;
+	margin: $default-space auto;
+}
+
+.traffic-light{
+	background-color: $color-black;
+	width: $traffic-light-width;
+	padding: $default-space;
+}
