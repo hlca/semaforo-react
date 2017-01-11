@@ -28,7 +28,7 @@ const render = () => {
 }
 
 //My Reducer
-const trafficLight = (state = 0, action) => {
+const trafficLight = (state, action) => {
   switch(action.type){
     case "CHANGE_LIGHT":
       switch(state){
@@ -44,8 +44,10 @@ const trafficLight = (state = 0, action) => {
     default:
       return state;
   }
-
 }
+
+
+
 //createStore: reducer -> store
 const store = createStore(trafficLight);
 
